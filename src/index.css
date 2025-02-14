@@ -4,6 +4,43 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+	--black-900: #121212;
+	--black-800: #282828;
+	--black-700: #3f3f3f;
+	--black-600: #717171;
+
+	--white-0: #ffffff;
+	--white-100: #f0f0f0;
+	--white-200: #e1e1e1;
+	--white-300: #c5c5c5;
+
+	--purple-500: #7a1cac;
+	--purple-400: #8733b4;
+}
+
+.dark {
+	--background: var(--black-800);
+	--sidebar: var(--black-900);
+	--card: var(--black-700);
+
+	--text-1: var(--white-0);
+	--text-2: var(--white-100);
+
+	--text-subtle: var(--white-300);
+}
+
+.light {
+	--background: var(--white-0);
+	--sidebar: var(--white-100);
+	--card: var(--white-200);
+
+	--text-1: var(--black-900);
+	--text-2: var(--black-800);
+
+	--text-subtle: var(--black-600);
+}
+
 /* styles.css */
 .CollapsibleContent {
 	overflow: hidden;
