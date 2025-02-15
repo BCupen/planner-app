@@ -7,11 +7,10 @@ function App() {
     <div className="w-full flex">
       <Sidebar />
 
-      <main className="w-full min-h-dvh p-4 md:p-12 bg-background">
+      <main className="w-full relative min-h-dvh p-4 md:p-12 bg-background">
         <AllTasks />
+        <ThemeSwitcher />
       </main>
-
-      <ThemeSwitcher />
     </div>
   );
 }

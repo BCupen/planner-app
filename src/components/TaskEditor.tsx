@@ -19,18 +19,25 @@ export const TaskEditor = ({
         </button>
       </Dialog.Trigger>
       <Dialog.Portal>
-        <Dialog.Content className="fixed top-[5%] right-[2.5%] w-[300px]">
+        <Dialog.Overlay className="bg-black bg-opacity-80 inset-0 fixed" />
+        <Dialog.Content
+          className="dialog-content"
+          onInteractOutside={(e) => e.preventDefault}
+        >
           <div className="w-full flex justify-between items-center">
             <Dialog.Title asChild>
-              <h2>{title}</h2>
+              <h2 className="text-text-2 text-lg font-bold">{title}</h2>
             </Dialog.Title>
             <Dialog.Close>
-              <Cross1Icon />
+              <Cross1Icon className="text-subtle w-5 h-5 hover:scale-110 transition-all" />
             </Dialog.Close>
           </div>
           <Dialog.Description>
             <p>{description}</p>
           </Dialog.Description>
+          <button className="bg-primary text-text-1 rounded-md p-2">
+            Click me
+          </button>
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>

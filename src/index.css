@@ -52,6 +52,28 @@
 	animation: slideUp 300ms ease-out;
 }
 
+
+.dialog-content {
+	position: fixed;
+	width: 100%;
+	max-width: 500px;
+	top: 25%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	border-radius: 6px;
+	height: auto;
+	padding: 1.5rem;
+	background-color: var(--card);
+}
+
+
+@media only screen and (max-width: 600px) {
+	.dialog-content {
+		max-width: 350px;
+	}
+}
+
+
 @keyframes slideDown {
 	from {
 		height: 0;

@@ -57,7 +57,7 @@ export const TaskItem = ({ todo }: TaskItemProps) => {
     <li
       onMouseOver={() => setActive(true)}
       onMouseLeave={() => setActive(false)}
-      className="w-full flex gap-3 p-2 rounded-md bg-sidebar border border-subtle shadow"
+      className="w-full flex gap-3 p-2 rounded-md bg-sidebar border border-subtle shadow-md"
     >
       <Checkbox.Root
         checked={todo.completed}
