@@ -6,7 +6,7 @@ export const Sidebar = () => {
 
   return (
     <aside
-      className={`h-dvh max-w-[250px] ${
+      className={`min-h-dvh z-10 max-w-[250px] ${
         expanded ? "w-full max-md:absolute" : "w-14"
       } transition-all duration-150 ease-linear bg-sidebar`}
     >
