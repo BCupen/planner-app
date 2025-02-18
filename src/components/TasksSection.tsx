@@ -7,10 +7,12 @@ import {
   TrashIcon,
   PlusIcon,
 } from "@radix-ui/react-icons";
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import { Priority, Todo } from "../data/types";
 import { PrioritySelector } from "./PrioritySelector";
 import { DatePicker } from "./DatePicker";
+import { useAppDispatch } from "../data/hooks";
+import { editTodo } from "../data/todosSlice";
 
 export interface TasksSectionProps {
   title: string;
@@ -97,6 +99,7 @@ interface EditTaskFormProps {
 }
 
 export const EditTaskForm = ({ todo, setShow }: EditTaskFormProps) => {
+  const dispatch = useAppDispatch();
   const [tempTodo, setTempTodo] = useState(todo);
 
   const handlePriorityChange = (value: Priority) => {
@@ -117,8 +120,17 @@ export const EditTaskForm = ({ todo, setShow }: EditTaskFormProps) => {
     });
   };
 
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    dispatch(editTodo({ id: todo.id, todo: tempTodo }));
+    setShow(false);
+  };
+
   return (
-    <form className="w-full flex flex-col items-start gap-2 text-text-1">
+    <form
+      className="w-full flex flex-col items-start gap-2 text-text-1"
+      onSubmit={(e) => handleSubmit(e)}
+    >
       <input
         type="text"
         className="w-full bg-transparent focus:outline-none font-semibold"
@@ -147,7 +159,20 @@ export const EditTaskForm = ({ todo, setShow }: EditTaskFormProps) => {
           onChange={handlePriorityChange}
         />
       </div>
-      <button onClick={() => setShow(false)}>Close</button>
+      <span className="w-full flex justify-end gap-2">
+        <button
+          onClick={() => setShow(false)}
+          className="bg-sidebar border border-subtle rounded-md text-subtle text-sm p-1 hover:bg-subtle hover:text-sidebar"
+        >
+          Cancel
+        </button>
+        <button
+          type="submit"
+          className="bg-primary rounded-md text-sm py-1 px-2 hover:bg-transparent border border-primary hover:text-primary"
+        >
+          Save
+        </button>
+      </span>
     </form>
   );
 };
