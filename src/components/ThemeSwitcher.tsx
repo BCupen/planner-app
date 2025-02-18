@@ -17,7 +17,7 @@ export const ThemeSwitcher = () => {
 
   return (
     <button
-      className="absolute bottom-0 right-0 p-5"
+      className="fixed bottom-0 right-0 p-5"
       onClick={() => setDarkMode(!darkMode)}
     >
       {darkMode ? (

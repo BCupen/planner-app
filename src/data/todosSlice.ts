@@ -9,12 +9,14 @@ const initialState: Todo[] = [
     description: "This is a test description",
     completed: false,
     priority: Priority.LOW,
+    dueDate: new Date(),
   },
   {
     title: "Finish this project",
     description: "I really need to finish this project.",
     completed: false,
     priority: Priority.HIGH,
+    dueDate: new Date(),
   },
 ];
 

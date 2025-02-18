@@ -107,6 +107,16 @@ export const EditTaskForm = ({ todo, setShow }: EditTaskFormProps) => {
       };
     });
   };
+
+  const handleDueDateChange = (value: Date) => {
+    setTempTodo((prev) => {
+      return {
+        ...prev,
+        dueDate: value,
+      };
+    });
+  };
+
   return (
     <form className="w-full flex flex-col items-start gap-2 text-text-1">
       <input
@@ -131,7 +141,7 @@ export const EditTaskForm = ({ todo, setShow }: EditTaskFormProps) => {
         }
       />
       <div className="flex gap-3">
-        <DatePicker />
+        <DatePicker value={tempTodo.dueDate} onChange={handleDueDateChange} />
         <PrioritySelector
           value={tempTodo.priority}
           onChange={handlePriorityChange}

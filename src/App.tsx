@@ -1,6 +1,7 @@
 import { Sidebar } from "./components/Sidebar";
 import { ThemeSwitcher } from "./components/ThemeSwitcher";
 import AllTasks from "./pages/AllTasks";
+import "react-day-picker/style.css";
 
 function App() {
   return (
