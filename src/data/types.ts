@@ -4,7 +4,7 @@ export interface Todo {
   description: string;
   completed: boolean;
   priority: Priority;
-  dueDate: Date;
+  dueDate: string;
 }
 
 export enum Priority {

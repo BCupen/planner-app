@@ -6,7 +6,6 @@ export const ThemeSwitcher = () => {
 
   useEffect(() => {
     if (darkMode) {
-      console.log("here");
       document.body.classList.remove("light");
       document.body.classList.add("dark");
     } else {

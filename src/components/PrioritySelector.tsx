@@ -1,6 +1,11 @@
-import { BookmarkFilledIcon, ChevronDownIcon } from "@radix-ui/react-icons";
+import {
+  BookmarkFilledIcon,
+  ChevronDownIcon,
+  ExclamationTriangleIcon,
+} from "@radix-ui/react-icons";
 import { Select } from "radix-ui";
 import { Priority } from "../data/types";
+import { getPriorityColor } from "../data/utils";
 
 interface PrioritySelectorProps {
   value: Priority;
@@ -11,27 +16,18 @@ export const PrioritySelector = ({
   value,
   onChange,
 }: PrioritySelectorProps) => {
-  const getPriorityColor = (p: Priority) => {
-    console.log(value);
-    switch (p) {
-      case Priority.LOW:
-        return "text-blue-600";
-      case Priority.MEDIUM:
-        return "text-orange-600";
-      case Priority.HIGH:
-        return "text-red-600";
-      default:
-        return "text-blue-600";
-    }
-  };
-
+  const isOverdue = value === Priority.OVERDUE;
   return (
     <Select.Root value={value} onValueChange={onChange}>
       <Select.Trigger className="flex gap-1 items-center p-1 focus:outline-none border border-subtle rounded text-xs">
         <Select.Value placeholder="Priority">
-          <BookmarkFilledIcon
-            className={`${getPriorityColor(value)} w-4 h-4`}
-          />
+          {isOverdue ? (
+            <ExclamationTriangleIcon className="text-red-800 w-4 h-4" />
+          ) : (
+            <BookmarkFilledIcon
+              className={`${getPriorityColor(value)} w-4 h-4`}
+            />
+          )}
         </Select.Value>
         <Select.Icon>
           <ChevronDownIcon className="text-subtle w-4 h-4" />

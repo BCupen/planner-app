@@ -6,13 +6,16 @@ import {
   Pencil1Icon,
   TrashIcon,
   PlusIcon,
+  ExclamationTriangleIcon,
+  BookmarkFilledIcon,
 } from "@radix-ui/react-icons";
 import { FormEvent, useState } from "react";
 import { Priority, Todo } from "../data/types";
 import { PrioritySelector } from "./PrioritySelector";
 import { DatePicker } from "./DatePicker";
 import { useAppDispatch } from "../data/hooks";
-import { editTodo } from "../data/todosSlice";
+import { completeTodo, editTodo } from "../data/todosSlice";
+import { getPriorityColor } from "../data/utils";
 
 export interface TasksSectionProps {
   title: string;
@@ -55,8 +58,13 @@ interface TaskItemProps {
 }
 
 export const TaskItem = ({ todo }: TaskItemProps) => {
+  const dispatch = useAppDispatch();
   const [active, setActive] = useState(false);
-  const [editMode, setEditMode] = useState(true);
+  const [editMode, setEditMode] = useState(false);
+
+  const handleComplete = (checked: boolean | "indeterminate") => {
+    dispatch(completeTodo({ id: todo.id, value: checked }));
+  };
 
   return (
     <li
@@ -70,23 +78,30 @@ export const TaskItem = ({ todo }: TaskItemProps) => {
         <>
           <Checkbox.Root
             checked={todo.completed}
+            onCheckedChange={handleComplete}
             className="w-4 h-4 mt-1 rounded-sm border border-subtle shrink-0"
-            id={todo.title.replace(" ", "-")}
+            id={todo.id}
           >
             <Checkbox.Indicator>
               <CheckIcon className="text-primary" />
             </Checkbox.Indicator>
           </Checkbox.Root>
           <span className="flex w-full flex-col ">
-            <label
-              className="text-text-2 font-medium"
-              htmlFor={todo.title.replace(" ", "-")}
-            >
+            <label className="text-text-2 font-medium" htmlFor={todo.id}>
               {todo.title}
             </label>
             <p className="text-stone-500 text-xs">{todo.description}</p>
           </span>
-          <TaskIcons active={active} setEditShow={setEditMode} />{" "}
+          <span className="flex items-start gap">
+            <TaskIcons active={active} setEditShow={setEditMode} />
+            {todo.priority === Priority.OVERDUE ? (
+              <ExclamationTriangleIcon className="text-red-800 w-6 h-6 mt-1" />
+            ) : (
+              <BookmarkFilledIcon
+                className={`${getPriorityColor(todo.priority)} w-6 h-6`}
+              />
+            )}
+          </span>
         </>
       )}
     </li>
@@ -115,7 +130,7 @@ export const EditTaskForm = ({ todo, setShow }: EditTaskFormProps) => {
     setTempTodo((prev) => {
       return {
         ...prev,
-        dueDate: value,
+        dueDate: value.toISOString(),
       };
     });
   };
@@ -153,7 +168,10 @@ export const EditTaskForm = ({ todo, setShow }: EditTaskFormProps) => {
         }
       />
       <div className="flex gap-3">
-        <DatePicker value={tempTodo.dueDate} onChange={handleDueDateChange} />
+        <DatePicker
+          value={new Date(tempTodo.dueDate)}
+          onChange={handleDueDateChange}
+        />
         <PrioritySelector
           value={tempTodo.priority}
           onChange={handlePriorityChange}
