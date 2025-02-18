@@ -43,21 +43,21 @@ export const PrioritySelector = ({
             <Select.Group className="flex flex-col gap-1">
               <Select.Item
                 value={Priority.LOW}
-                className="flex gap-2 items-center text-subtle px-1 text-xs cursor-pointer"
+                className="flex gap-2 items-center text-subtle p-1 text-xs cursor-pointer"
               >
                 <BookmarkFilledIcon className="text-blue-600" />
                 <Select.ItemText>Low</Select.ItemText>
               </Select.Item>
               <Select.Item
                 value={Priority.MEDIUM}
-                className="flex gap-2 items-center text-subtle px-1 text-xs cursor-pointer"
+                className="flex gap-2 items-center text-subtle p-1 text-xs cursor-pointer"
               >
                 <BookmarkFilledIcon className="text-orange-600" />
                 <Select.ItemText>Medium</Select.ItemText>
               </Select.Item>
               <Select.Item
                 value={Priority.HIGH}
-                className="flex gap-2 items-center text-subtle px-1 text-xs cursor-pointer"
+                className="flex gap-2 items-center text-subtle p-1 text-xs cursor-pointer"
               >
                 <BookmarkFilledIcon className="text-red-600" />
                 <Select.ItemText>High</Select.ItemText>

@@ -10,6 +10,7 @@ import {
 import { useState } from "react";
 import { Priority, Todo } from "../data/types";
 import { PrioritySelector } from "./PrioritySelector";
+import { DatePicker } from "./DatePicker";
 
 export interface TasksSectionProps {
   title: string;
@@ -41,6 +42,7 @@ export const TasksSection = ({ title, todos }: TasksSectionProps) => {
             <TaskItem todo={todo} key={i} />
           ))}
         </ul>
+        <AddTask />
       </Collapsible.Content>
     </Collapsible.Root>
   );
@@ -128,7 +130,8 @@ export const EditTaskForm = ({ todo, setShow }: EditTaskFormProps) => {
           })
         }
       />
-      <div>
+      <div className="flex gap-3">
+        <DatePicker />
         <PrioritySelector
           value={tempTodo.priority}
           onChange={handlePriorityChange}
