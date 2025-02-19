@@ -28,7 +28,7 @@ export const todosSlice = createSlice({
   initialState,
   reducers: {
     addTodo: (state, action: PayloadAction<Todo>) => {
-      state = [action.payload, ...state];
+      state.push(action.payload);
     },
     editTodo: (state, action) => {
       const todoIndex = state.findIndex(

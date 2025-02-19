@@ -14,8 +14,8 @@ import { Priority, Todo } from "../data/types";
 import { PrioritySelector } from "./PrioritySelector";
 import { DatePicker } from "./DatePicker";
 import { useAppDispatch } from "../data/hooks";
-import { completeTodo, editTodo } from "../data/todosSlice";
-import { getPriorityColor } from "../data/utils";
+import { addTodo, completeTodo, editTodo } from "../data/todosSlice";
+import { generateUID, getPriorityColor } from "../data/utils";
 
 export interface TasksSectionProps {
   title: string;
@@ -46,8 +46,8 @@ export const TasksSection = ({ title, todos }: TasksSectionProps) => {
           {todos.map((todo, i) => (
             <TaskItem todo={todo} key={i} />
           ))}
+          <AddTask />
         </ul>
-        <AddTask />
       </Collapsible.Content>
     </Collapsible.Root>
   );
@@ -55,15 +55,28 @@ export const TasksSection = ({ title, todos }: TasksSectionProps) => {
 
 interface TaskItemProps {
   todo: Todo;
+  createMode?: boolean;
+  onCreateClose?: (value: boolean) => void;
 }
 
-export const TaskItem = ({ todo }: TaskItemProps) => {
+export const TaskItem = ({
+  todo,
+  createMode = false,
+  onCreateClose,
+}: TaskItemProps) => {
   const dispatch = useAppDispatch();
   const [active, setActive] = useState(false);
-  const [editMode, setEditMode] = useState(false);
+  const [editMode, setEditMode] = useState(createMode);
 
   const handleComplete = (checked: boolean | "indeterminate") => {
     dispatch(completeTodo({ id: todo.id, value: checked }));
+  };
+
+  const handleSetShow = (value: boolean) => {
+    setEditMode(value);
+    if (onCreateClose) {
+      onCreateClose(value);
+    }
   };
 
   return (
@@ -73,7 +86,7 @@ export const TaskItem = ({ todo }: TaskItemProps) => {
       className="w-full flex gap-3 p-2 rounded-md bg-sidebar border border-subtle shadow-md transition-all duration-200"
     >
       {editMode ? (
-        <EditTaskForm todo={todo} setShow={setEditMode} />
+        <EditTaskForm todo={todo} setShow={handleSetShow} create={createMode} />
       ) : (
         <>
           <Checkbox.Root
@@ -111,9 +124,14 @@ export const TaskItem = ({ todo }: TaskItemProps) => {
 interface EditTaskFormProps {
   todo: Todo;
   setShow: (value: boolean) => void;
+  create?: boolean;
 }
 
-export const EditTaskForm = ({ todo, setShow }: EditTaskFormProps) => {
+export const EditTaskForm = ({
+  todo,
+  setShow,
+  create = false,
+}: EditTaskFormProps) => {
   const dispatch = useAppDispatch();
   const [tempTodo, setTempTodo] = useState(todo);
 
@@ -141,10 +159,16 @@ export const EditTaskForm = ({ todo, setShow }: EditTaskFormProps) => {
     setShow(false);
   };
 
+  const handleCreate = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    dispatch(addTodo(tempTodo));
+    setShow(false);
+  };
+
   return (
     <form
       className="w-full flex flex-col items-start gap-2 text-text-1"
-      onSubmit={(e) => handleSubmit(e)}
+      onSubmit={create ? (e) => handleCreate(e) : (e) => handleSubmit(e)}
     >
       <input
         type="text"
@@ -219,15 +243,28 @@ export const TaskIcons = ({ active, setEditShow }: TaskIconProps) => {
 export const AddTask = () => {
   const [showForm, setShowForm] = useState(false);
 
-  return (
-    <>
+  return showForm ? (
+    <TaskItem
+      todo={{
+        id: generateUID(),
+        title: "",
+        description: "",
+        completed: false,
+        priority: Priority.LOW,
+        dueDate: new Date().toISOString(),
+      }}
+      createMode
+      onCreateClose={setShowForm}
+    />
+  ) : (
+    <li>
       <button
-        className="shadow rounded-md p-2 flex items-center gap-2 bg-primary hover:border hover:border-primary hover:bg-transparent text-white hover:text-primary transition-all duration-100"
+        className="w-[115px] shadow rounded-md p-2 flex items-center gap-2 bg-primary hover:border hover:border-primary hover:bg-transparent text-white hover:text-primary transition-all duration-100"
         onClick={() => setShowForm(true)}
       >
         <p className=" text-xs font-semibold">Add new task</p>
         <PlusIcon className="w-4 h-4" />
       </button>
-    </>
+    </li>
   );
 };

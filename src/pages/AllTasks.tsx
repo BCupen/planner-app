@@ -1,9 +1,14 @@
+import { useEffect } from "react";
 import { TasksSection } from "../components/TasksSection";
 import { useAppSelector } from "../data/hooks";
 import { todoState } from "../data/todosSlice";
 
 const AllTasks = () => {
   const todos = useAppSelector(todoState);
+
+  // useEffect(() => {
+  //   console.log(todos);
+  // }, [todos]);
 
   return (
     <section className="flex flex-col items-start gap-3">
