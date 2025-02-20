@@ -4,7 +4,6 @@ import {
   ChevronUpIcon,
   CheckIcon,
   Pencil1Icon,
-  TrashIcon,
   PlusIcon,
   ExclamationTriangleIcon,
   BookmarkFilledIcon,
@@ -16,6 +15,7 @@ import { DatePicker } from "./DatePicker";
 import { useAppDispatch } from "../data/hooks";
 import { addTodo, completeTodo, editTodo } from "../data/todosSlice";
 import { generateUID, getPriorityColor } from "../data/utils";
+import { DeleteTask } from "./DeleteTask";
 
 export interface TasksSectionProps {
   title: string;
@@ -106,7 +106,11 @@ export const TaskItem = ({
             <p className="text-stone-500 text-xs">{todo.description}</p>
           </span>
           <span className="flex items-start gap">
-            <TaskIcons active={active} setEditShow={setEditMode} />
+            <TaskIcons
+              active={active}
+              setEditShow={setEditMode}
+              todoId={todo.id}
+            />
             {todo.priority === Priority.OVERDUE ? (
               <ExclamationTriangleIcon className="text-red-800 w-6 h-6 mt-1" />
             ) : (
@@ -222,9 +226,10 @@ export const EditTaskForm = ({
 interface TaskIconProps {
   active: boolean;
   setEditShow: (value: boolean) => void;
+  todoId: string;
 }
 
-export const TaskIcons = ({ active, setEditShow }: TaskIconProps) => {
+export const TaskIcons = ({ active, setEditShow, todoId }: TaskIconProps) => {
   return (
     <span className="flex items-center gap-1 p-1">
       <button
@@ -233,9 +238,7 @@ export const TaskIcons = ({ active, setEditShow }: TaskIconProps) => {
       >
         <Pencil1Icon className="text-subtle hover:text-primary hover:scale-105 transition-all w-5 h-5" />
       </button>
-      <button className={`${active ? "block" : "hidden"}`}>
-        <TrashIcon className="text-subtle hover:text-primary hover:scale-105 transition-all w-5 h-5" />
-      </button>
+      <DeleteTask active={active} todoId={todoId} />
     </span>
   );
 };

@@ -46,11 +46,16 @@ export const todosSlice = createSlice({
         state[todoIndex].completed = action.payload.value;
       }
     },
+    removeTodo: (state, action: PayloadAction<string>) => {
+      const newTodos = [...state.filter((todo) => todo.id !== action.payload)];
+      return [...newTodos];
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { addTodo, editTodo, completeTodo } = todosSlice.actions;
+export const { addTodo, editTodo, completeTodo, removeTodo } =
+  todosSlice.actions;
 
 export const todoState = (state: RootState) => state.todos;
 
