@@ -262,7 +262,7 @@ export const AddTask = () => {
   ) : (
     <li>
       <button
-        className="w-[115px] shadow rounded-md p-2 flex items-center gap-2 bg-primary hover:border hover:border-primary hover:bg-transparent text-white hover:text-primary transition-all duration-100"
+        className="w-[115px] shadow rounded-md p-2 flex items-center gap-2 bg-primary border border-primary hover:bg-transparent text-white hover:text-primary transition-all duration-100"
         onClick={() => setShowForm(true)}
       >
         <p className=" text-xs font-semibold">Add new task</p>

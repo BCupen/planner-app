@@ -1,16 +1,17 @@
 import { ChevronLeftIcon, ChevronRightIcon } from "@radix-ui/react-icons";
 import { useState } from "react";
+import { NavLink } from "react-router";
 
 export const Sidebar = () => {
   const [expanded, setExpanded] = useState(true);
 
   return (
     <aside
-      className={`min-h-dvh z-10 max-w-[250px] ${
+      className={`h-dvh z-10 max-w-[250px] ${
         expanded ? "w-full max-md:absolute" : "w-14"
       } transition-all duration-150 ease-linear bg-sidebar`}
     >
-      <nav className="w-full flex flex-col items-center p-4">
+      <nav className="w-full flex flex-col items-center p-4 gap-3">
         <div className="max-h-9 w-full flex justify-between items-center">
           <h1
             className={`text-nowrap text-2xl font-bold text-primary overflow-hidden transition-all duration-50 ease-in origin-left ${
@@ -30,7 +31,25 @@ export const Sidebar = () => {
             )}
           </button>
         </div>
+
+        <ul className="w-full flex flex-col p-2 text-text-1 font-semibold">
+          <Link path="/" title="All" />
+          <Link path="/today" title="Today" />
+        </ul>
       </nav>
     </aside>
+  );
+};
+
+const Link = ({ title, path }: { title: string; path: string }) => {
+  return (
+    <li>
+      <NavLink
+        to={path}
+        className={({ isActive }) => (isActive ? "text-primary underline" : "")}
+      >
+        {title}
+      </NavLink>
+    </li>
   );
 };

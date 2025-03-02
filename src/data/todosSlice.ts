@@ -18,7 +18,7 @@ const initialState: Todo[] = [
     title: "Finish this project",
     description: "I really need to finish this project.",
     completed: false,
-    priority: Priority.OVERDUE,
+    priority: Priority.HIGH,
     dueDate: new Date().toISOString(),
   },
 ];

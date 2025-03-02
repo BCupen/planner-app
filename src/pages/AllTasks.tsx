@@ -2,6 +2,8 @@ import { useEffect } from "react";
 import { TasksSection } from "../components/TasksSection";
 import { useAppSelector } from "../data/hooks";
 import { todoState } from "../data/todosSlice";
+import { Priority } from "../data/types";
+import { PageHeader } from "../components/PageHeader";
 
 const AllTasks = () => {
   const todos = useAppSelector(todoState);
@@ -11,13 +13,21 @@ const AllTasks = () => {
   // }, [todos]);
 
   return (
-    <section className="flex flex-col items-start gap-3">
-      <div className="flex flex-col gap-3">
-        <h2 className="text-2xl font-semibold text-text-1">Your Tasks</h2>
-        <p className="text-subtle text-sm font-medium">5 tasks remaining</p>
-      </div>
+    <section className="flex flex-col items-start gap-5">
+      <PageHeader
+        title="Your Tasks"
+        subText={`${todos.length} tasks remaining`}
+      />
 
-      <TasksSection title="High Priority" todos={todos} />
+      <TasksSection
+        title="High Priority"
+        todos={todos.filter((todo) => todo.priority === Priority.HIGH)}
+      />
+
+      <TasksSection
+        title="Remaining Tasks"
+        todos={todos.filter((todo) => !todo.completed)}
+      />
     </section>
   );
 };

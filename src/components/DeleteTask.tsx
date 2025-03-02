@@ -41,7 +41,7 @@ export const DeleteTask = ({ active, todoId }: DeleteTaskProps) => {
                 onClick={() => handleDelete()}
                 className="border border-red-500 bg-red-500 text-white hover:bg-transparent hover:text-red-500 transition-all rounded-md p-2 text-sm"
               >
-                Yes, delete account
+                Delete
               </button>
             </AlertDialog.Action>
           </div>
