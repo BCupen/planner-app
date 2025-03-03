@@ -11,7 +11,7 @@ export const Sidebar = () => {
         expanded ? "w-full max-md:absolute" : "w-14"
       } transition-all duration-150 ease-linear bg-sidebar`}
     >
-      <nav className="w-full flex flex-col items-center p-4 gap-3">
+      <nav className="w-full flex flex-col items-start p-4 gap-3">
         <div className="max-h-9 w-full flex justify-between items-center">
           <h1
             className={`text-nowrap text-2xl font-bold text-primary overflow-hidden transition-all duration-50 ease-in origin-left ${
@@ -32,7 +32,11 @@ export const Sidebar = () => {
           </button>
         </div>
 
-        <ul className="w-full flex flex-col p-2 text-text-1 font-semibold">
+        <ul
+          className={`${
+            expanded ? "w-32" : "w-0"
+          } flex flex-col gap text-text-1 font-semibold overflow-hidden`}
+        >
           <Link path="/" title="All" />
           <Link path="/today" title="Today" />
         </ul>
@@ -46,7 +50,9 @@ const Link = ({ title, path }: { title: string; path: string }) => {
     <li>
       <NavLink
         to={path}
-        className={({ isActive }) => (isActive ? "text-primary underline" : "")}
+        className={({ isActive }) =>
+          isActive ? "text-primary underline" : "hover:text-primary"
+        }
       >
         {title}
       </NavLink>
