@@ -4,6 +4,7 @@ import { ThemeSwitcher } from "./components/ThemeSwitcher";
 import AllTasks from "./pages/AllTasks";
 import "react-day-picker/style.css";
 import TodaysTasks from "./pages/TodaysTasks";
+import WeeklyTasks from "./pages/WeeklyTasks";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Routes>
           <Route index element={<AllTasks />} />
           <Route path="/today" element={<TodaysTasks />} />
+          <Route path="/upcoming" element={<WeeklyTasks />} />
         </Routes>
         <ThemeSwitcher />
       </main>

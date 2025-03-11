@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { TasksSection } from "../components/TasksSection";
 import { useAppSelector } from "../data/hooks";
 import { todoState } from "../data/todosSlice";

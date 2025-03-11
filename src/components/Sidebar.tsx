@@ -9,7 +9,7 @@ export const Sidebar = () => {
     <aside
       className={`h-dvh z-10 max-w-[250px] ${
         expanded ? "w-full max-md:absolute" : "w-14"
-      } transition-all duration-150 ease-linear bg-sidebar`}
+      } sticky top-0 transition-all duration-150 ease-linear bg-sidebar`}
     >
       <nav className="w-full flex flex-col items-start p-4 gap-3">
         <div className="max-h-9 w-full flex justify-between items-center">
@@ -39,6 +39,7 @@ export const Sidebar = () => {
         >
           <Link path="/" title="All" />
           <Link path="/today" title="Today" />
+          <Link path="/upcoming" title="Upcoming" />
         </ul>
       </nav>
     </aside>
