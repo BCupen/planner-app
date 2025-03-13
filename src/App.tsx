@@ -5,18 +5,20 @@ import AllTasks from "./pages/AllTasks";
 import "react-day-picker/style.css";
 import TodaysTasks from "./pages/TodaysTasks";
 import WeeklyTasks from "./pages/WeeklyTasks";
+import { Calendar } from "./components/Calendar";
 
 function App() {
   return (
     <div className="w-full flex">
       <Sidebar />
 
-      <main className="w-full relative h-dvh overflow-y-scroll p-4 md:p-12 bg-background">
+      <main className="w-full relative min-h-dvh p-4 md:p-12 bg-background">
         <Routes>
           <Route index element={<AllTasks />} />
           <Route path="/today" element={<TodaysTasks />} />
           <Route path="/upcoming" element={<WeeklyTasks />} />
         </Routes>
+        <Calendar />
         <ThemeSwitcher />
       </main>
     </div>
