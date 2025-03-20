@@ -6,12 +6,13 @@ import { useNavigate } from "react-router";
 
 export const Calendar = () => {
   const navigate = useNavigate();
-  const today = new Date();
+  const [selectedDate, setSelectedDate] = useState(new Date());
   const defaultClassNames = getDefaultClassNames();
   const [open, setOpen] = useState(false);
 
   const handleSelect = (value: Date) => {
     const formatValue = format(value, "P");
+    setSelectedDate(value);
     navigate(`/tasks/${formatValue.split("/").join("-")}`);
   };
 
@@ -39,7 +40,7 @@ export const Calendar = () => {
           required
           mode="single"
           showOutsideDays
-          selected={today}
+          selected={selectedDate}
           onSelect={handleSelect}
           classNames={{
             root: `${defaultClassNames.root} p-3 max-lg:mt-6`,
