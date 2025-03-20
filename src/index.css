@@ -41,6 +41,10 @@
 	--text-subtle: var(--black-600);
 }
 
+body {
+	background-color: var(--background);
+}
+
 /* styles.css */
 .CollapsibleContent {
 	overflow: hidden;

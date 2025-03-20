@@ -12,7 +12,7 @@ const AllTasks = () => {
   // }, [todos]);
 
   return (
-    <section className="flex flex-col items-start gap-5">
+    <section className="w-full flex flex-col items-start gap-5">
       <PageHeader
         title="Your Tasks"
         subText={`${todos.length} tasks remaining`}
