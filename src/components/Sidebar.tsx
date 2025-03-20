@@ -37,9 +37,9 @@ export const Sidebar = () => {
             expanded ? "w-32" : "w-0"
           } flex flex-col gap text-text-1 font-semibold overflow-hidden`}
         >
-          <Link path="/" title="All" />
-          <Link path="/today" title="Today" />
-          <Link path="/upcoming" title="Upcoming" />
+          <Link path="/tasks" title="All" />
+          <Link path="/tasks/today" title="Today" />
+          <Link path="/tasks/upcoming" title="Upcoming" />
         </ul>
       </nav>
     </aside>
@@ -54,6 +54,7 @@ const Link = ({ title, path }: { title: string; path: string }) => {
         className={({ isActive }) =>
           isActive ? "text-primary underline" : "hover:text-primary"
         }
+        end
       >
         {title}
       </NavLink>

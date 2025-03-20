@@ -1,11 +1,20 @@
 import { CalendarIcon, Cross1Icon } from "@radix-ui/react-icons";
+import { format } from "date-fns";
 import { useState } from "react";
 import { DayPicker, getDefaultClassNames } from "react-day-picker";
+import { useNavigate } from "react-router";
 
 export const Calendar = () => {
+  const navigate = useNavigate();
   const today = new Date();
   const defaultClassNames = getDefaultClassNames();
   const [open, setOpen] = useState(false);
+
+  const handleSelect = (value: Date) => {
+    const formatValue = format(value, "P");
+    navigate(`/tasks/${formatValue.split("/").join("-")}`);
+  };
+
   return (
     <>
       <button
@@ -31,7 +40,7 @@ export const Calendar = () => {
           mode="single"
           showOutsideDays
           selected={today}
-          disabled={{ before: new Date() }}
+          onSelect={handleSelect}
           classNames={{
             root: `${defaultClassNames.root} p-3 max-lg:mt-6`,
             day: `w-9 h-8 text-center text-xs`,
