@@ -1,20 +1,11 @@
 import { TasksSection } from "../components/TasksSection";
 import { Priority, Todo } from "../data/types";
 import { PageHeader } from "../components/PageHeader";
-import { useGetTodosQuery } from "../data/api/todoApiSlice";
-import { useEffect } from "react";
+import { useAppSelector } from "../data/hooks";
+import { todoState } from "../data/todosSlice";
 
 const AllTasks = () => {
-  const { data: todos, isLoading } = useGetTodosQuery({});
-
-  useEffect(() => {
-    if (isLoading || !todos) return;
-    console.log(todos.length);
-  }, [todos]);
-
-  if (isLoading) {
-    return <div>Loading</div>;
-  }
+  const todos = useAppSelector(todoState);
 
   return (
     <section className="w-full flex flex-col items-start gap-5">

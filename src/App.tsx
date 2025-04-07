@@ -7,8 +7,20 @@ import TodaysTasks from "./pages/TodaysTasks";
 import WeeklyTasks from "./pages/WeeklyTasks";
 import { Calendar } from "./components/Calendar";
 import SpecificDateTasks from "./pages/SpecificDateTasks";
+import { useGetTodosQuery } from "./data/api/todoApiSlice";
+import { useEffect } from "react";
+import { useAppDispatch } from "./data/hooks";
+import { setTodos } from "./data/todosSlice";
 
 function App() {
+  const { data: todos, isLoading } = useGetTodosQuery({});
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (isLoading || !todos) return;
+    dispatch(setTodos(todos));
+  }, [todos]);
+
   return (
     <div className="w-full flex">
       <Sidebar />

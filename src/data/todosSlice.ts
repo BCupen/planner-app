@@ -1,32 +1,17 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { Priority, Todo } from "./types";
 import { RootState } from "./store";
-import { generateUID } from "./utils";
+import { Todo } from "./types";
 
-const initialState: Todo[] = [
-  {
-    id: generateUID(),
-    title: "Test Task 1",
-    description: "This is a test description",
-    completed: false,
-    priority: Priority.LOW,
-    dueDate: new Date().toISOString(),
-  },
-  {
-    id: generateUID(),
-    title: "Finish this project",
-    description: "I really need to finish this project.",
-    completed: false,
-    priority: Priority.HIGH,
-    dueDate: new Date().toISOString(),
-  },
-];
+const initialState: Todo[] = [];
 
 export const todosSlice = createSlice({
   name: "todo",
   initialState,
   reducers: {
+    setTodos: (_state, action: PayloadAction<Todo[]>) => {
+      return [...action.payload];
+    },
     addTodo: (state, action: PayloadAction<Todo>) => {
       state.push(action.payload);
     },
@@ -54,7 +39,7 @@ export const todosSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { addTodo, editTodo, completeTodo, removeTodo } =
+export const { setTodos, addTodo, editTodo, completeTodo, removeTodo } =
   todosSlice.actions;
 
 export const todoState = (state: RootState) => state.todos;
