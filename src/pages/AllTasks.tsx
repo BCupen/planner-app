@@ -7,6 +7,8 @@ import { todoState } from "../data/todosSlice";
 const AllTasks = () => {
   const todos = useAppSelector(todoState);
 
+  console.log(todos);
+
   return (
     <section className="w-full flex flex-col items-start gap-5">
       <PageHeader

@@ -16,6 +16,7 @@ import { useAppDispatch } from "../data/hooks";
 import { addTodo, completeTodo, editTodo } from "../data/todosSlice";
 import { generateUID, getPriorityColor } from "../data/utils";
 import { DeleteTask } from "./DeleteTask";
+import { useCreateTodoMutation } from "../data/api/todoApiSlice";
 
 export interface TasksSectionProps {
   title: string;
@@ -138,6 +139,7 @@ export const EditTaskForm = ({
 }: EditTaskFormProps) => {
   const dispatch = useAppDispatch();
   const [tempTodo, setTempTodo] = useState(todo);
+  const [createTodo] = useCreateTodoMutation();
 
   const handlePriorityChange = (value: Priority) => {
     setTempTodo((prev) => {
@@ -165,8 +167,14 @@ export const EditTaskForm = ({
 
   const handleCreate = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(addTodo(tempTodo));
-    setShow(false);
+    try {
+      dispatch(addTodo(tempTodo));
+      const response = createTodo(tempTodo).unwrap();
+      console.log(response);
+      setShow(false);
+    } catch (error) {
+      console.log(`Error:${error}`);
+    }
   };
 
   return (
