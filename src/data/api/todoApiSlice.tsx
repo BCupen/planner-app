@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { TodoPatchRequest } from "../types";
 
 const baseUrl = "http://localhost:8686/todos";
 
@@ -25,6 +26,13 @@ export const todoApiSlice = createApi({
         url: `/${todoId}`,
       }),
     }),
+    updateTodo: builder.mutation({
+      query: ({ updatedTodo, todoId }: TodoPatchRequest) => ({
+        method: "PATCH",
+        url: `/${todoId}`,
+        body: updatedTodo,
+      }),
+    }),
   }),
 });
 
@@ -32,4 +40,5 @@ export const {
   useGetTodosQuery,
   useCreateTodoMutation,
   useDeleteTodoMutation,
+  useUpdateTodoMutation,
 } = todoApiSlice;

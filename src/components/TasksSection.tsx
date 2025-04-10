@@ -16,7 +16,10 @@ import { useAppDispatch } from "../data/hooks";
 import { addTodo, completeTodo, editTodo } from "../data/todosSlice";
 import { getPriorityColor } from "../data/utils";
 import { DeleteTask } from "./DeleteTask";
-import { useCreateTodoMutation } from "../data/api/todoApiSlice";
+import {
+  useCreateTodoMutation,
+  useUpdateTodoMutation,
+} from "../data/api/todoApiSlice";
 
 export interface TasksSectionProps {
   title: string;
@@ -140,6 +143,7 @@ export const EditTaskForm = ({
   const dispatch = useAppDispatch();
   const [tempTodo, setTempTodo] = useState(todo);
   const [createTodo] = useCreateTodoMutation();
+  const [updateTodo] = useUpdateTodoMutation();
 
   const handlePriorityChange = (value: Priority) => {
     setTempTodo((prev) => {
@@ -159,10 +163,19 @@ export const EditTaskForm = ({
     });
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(editTodo({ id: todo._id, todo: tempTodo }));
-    setShow(false);
+    try {
+      const response = await updateTodo({
+        todoId: todo._id || "",
+        updatedTodo: tempTodo,
+      });
+      console.log(response);
+      dispatch(editTodo({ id: todo._id, todo: tempTodo }));
+      setShow(false);
+    } catch (error) {
+      console.log(`Error:${error}`);
+    }
   };
 
   const handleCreate = (e: FormEvent<HTMLFormElement>) => {

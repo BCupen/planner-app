@@ -15,3 +15,8 @@ export enum Priority {
   HIGH = "HIGH",
   OVERDUE = "OVERDUE",
 }
+
+export interface TodoPatchRequest {
+  todoId: string;
+  updatedTodo: Partial<Todo>;
+}
