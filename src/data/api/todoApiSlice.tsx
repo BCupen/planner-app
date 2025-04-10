@@ -25,6 +25,7 @@ export const todoApiSlice = createApi({
         method: "DELETE",
         url: `/${todoId}`,
       }),
+      invalidatesTags: ["Todo"],
     }),
     updateTodo: builder.mutation({
       query: ({ updatedTodo, todoId }: TodoPatchRequest) => ({
@@ -32,6 +33,7 @@ export const todoApiSlice = createApi({
         url: `/${todoId}`,
         body: updatedTodo,
       }),
+      invalidatesTags: ["Todo"],
     }),
   }),
 });
