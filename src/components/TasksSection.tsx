@@ -14,7 +14,7 @@ import { PrioritySelector } from "./PrioritySelector";
 import { DatePicker } from "./DatePicker";
 import { useAppDispatch } from "../data/hooks";
 import { addTodo, completeTodo, editTodo } from "../data/todosSlice";
-import { generateUID, getPriorityColor } from "../data/utils";
+import { getPriorityColor } from "../data/utils";
 import { DeleteTask } from "./DeleteTask";
 import { useCreateTodoMutation } from "../data/api/todoApiSlice";
 
@@ -70,7 +70,7 @@ export const TaskItem = ({
   const [editMode, setEditMode] = useState(createMode);
 
   const handleComplete = (checked: boolean | "indeterminate") => {
-    dispatch(completeTodo({ id: todo.id, value: checked }));
+    dispatch(completeTodo({ id: todo._id, value: checked }));
   };
 
   const handleSetShow = (value: boolean) => {
@@ -94,14 +94,14 @@ export const TaskItem = ({
             checked={todo.completed}
             onCheckedChange={handleComplete}
             className="w-4 h-4 mt-1 rounded-sm border border-subtle shrink-0"
-            id={todo.id}
+            id={todo._id}
           >
             <Checkbox.Indicator>
               <CheckIcon className="text-primary" />
             </Checkbox.Indicator>
           </Checkbox.Root>
           <span className="flex w-full flex-col ">
-            <label className="text-text-2 font-medium" htmlFor={todo.id}>
+            <label className="text-text-2 font-medium" htmlFor={todo._id}>
               {todo.title}
             </label>
             <p className="text-stone-500 text-xs">{todo.description}</p>
@@ -110,7 +110,7 @@ export const TaskItem = ({
             <TaskIcons
               active={active}
               setEditShow={setEditMode}
-              todoId={todo.id}
+              todoId={todo._id || "000"}
             />
             {todo.priority === Priority.OVERDUE ? (
               <ExclamationTriangleIcon className="text-red-800 w-6 h-6 mt-1" />
@@ -161,7 +161,7 @@ export const EditTaskForm = ({
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(editTodo({ id: todo.id, todo: tempTodo }));
+    dispatch(editTodo({ id: todo._id, todo: tempTodo }));
     setShow(false);
   };
 
@@ -257,7 +257,6 @@ export const AddTask = () => {
   return showForm ? (
     <TaskItem
       todo={{
-        id: generateUID(),
         title: "",
         description: "",
         completed: false,

@@ -7,7 +7,7 @@ import { todoState } from "../data/todosSlice";
 const AllTasks = () => {
   const todos = useAppSelector(todoState);
 
-  console.log(todos);
+  console.log(todos[0]);
 
   return (
     <section className="w-full flex flex-col items-start gap-5">
