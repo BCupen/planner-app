@@ -1,5 +1,5 @@
 import { CalendarIcon, Cross1Icon } from "@radix-ui/react-icons";
-import { format } from "date-fns";
+import { format, isEqual } from "date-fns";
 import { useState } from "react";
 import { DayPicker, getDefaultClassNames } from "react-day-picker";
 import { useNavigate } from "react-router";
@@ -11,9 +11,14 @@ export const Calendar = () => {
   const [open, setOpen] = useState(false);
 
   const handleSelect = (value: Date) => {
-    const formatValue = format(value, "P");
+    const formatValue = format(value, "yyyy-MM-dd");
     setSelectedDate(value);
-    navigate(`/tasks/${formatValue.split("/").join("-")}`);
+    const today = format(new Date(), "yyyy-MM-dd");
+    if (isEqual(formatValue, today)) {
+      navigate(`/tasks/today`);
+    } else {
+      navigate(`/tasks/${formatValue}`);
+    }
   };
 
   return (

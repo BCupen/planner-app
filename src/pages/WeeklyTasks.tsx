@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { PageHeader } from "../components/PageHeader";
 import { TasksSection } from "../components/TasksSection";
 import { useAppSelector } from "../data/hooks";
@@ -8,7 +8,11 @@ import { format } from "date-fns";
 
 const WeeklyTasks = () => {
   const todos = useAppSelector(todoState);
-  const week = getWeekRange();
+
+  const week = useMemo(() => {
+    return getWeekRange();
+  }, []);
+
   const weeklyTodos = useMemo(() => {
     return todos.filter((todo) => {
       const formattedDate = format(new Date(todo.dueDate), "yyyy-MM-dd");
