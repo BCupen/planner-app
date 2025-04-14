@@ -5,7 +5,7 @@ export const getWeekRange = () => {
   let week = [];
   for (let i = 1; i <= 7; i++) {
     let first = curr.getDate() - curr.getDay() + i;
-    let day = format(new Date(curr.setDate(first)), "PP");
+    let day = format(new Date(curr.setDate(first)), "yyyy-MM-dd");
     week.push(day);
   }
   return week;

@@ -1,15 +1,20 @@
+import { useEffect, useMemo } from "react";
 import { PageHeader } from "../components/PageHeader";
 import { TasksSection } from "../components/TasksSection";
 import { useAppSelector } from "../data/hooks";
 import { todoState } from "../data/todosSlice";
 import { getWeekRange } from "../utils";
+import { format } from "date-fns";
 
 const WeeklyTasks = () => {
   const todos = useAppSelector(todoState);
-
   const week = getWeekRange();
-
-  const weeklyTodos = todos.filter((todo) => week.includes(todo.dueDate));
+  const weeklyTodos = useMemo(() => {
+    return todos.filter((todo) => {
+      const formattedDate = format(new Date(todo.dueDate), "yyyy-MM-dd");
+      return week.includes(formattedDate);
+    });
+  }, [todos, week]);
 
   return (
     <section className="flex flex-col items-start gap-5">
