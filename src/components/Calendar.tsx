@@ -6,13 +6,12 @@ import { useNavigate } from "react-router";
 
 export const Calendar = () => {
   const navigate = useNavigate();
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const selectedDate = new Date();
   const defaultClassNames = getDefaultClassNames();
   const [open, setOpen] = useState(false);
 
   const handleSelect = (value: Date) => {
     const formatValue = format(value, "yyyy-MM-dd");
-    setSelectedDate(value);
     const today = format(new Date(), "yyyy-MM-dd");
     if (isEqual(formatValue, today)) {
       navigate(`/tasks/today`);
