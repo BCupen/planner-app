@@ -18,6 +18,7 @@ export const Calendar = () => {
     } else {
       navigate(`/tasks/${formatValue}`);
     }
+    setOpen(false);
   };
 
   return (
