@@ -20,8 +20,9 @@ const AllTasks = () => {
         title="High Priority"
         todos={todos.filter(
           (todo: Todo) =>
-            todo.priority === Priority.HIGH ||
-            todo.priority === Priority.OVERDUE
+            (todo.priority === Priority.HIGH ||
+              todo.priority === Priority.OVERDUE) &&
+            !todo.completed
         )}
       />
 

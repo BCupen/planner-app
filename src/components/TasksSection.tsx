@@ -71,9 +71,22 @@ export const TaskItem = ({
   const dispatch = useAppDispatch();
   const [active, setActive] = useState(false);
   const [editMode, setEditMode] = useState(createMode);
+  const [updateTodo] = useUpdateTodoMutation();
 
-  const handleComplete = (checked: boolean | "indeterminate") => {
-    dispatch(completeTodo({ id: todo._id, value: checked }));
+  const handleComplete = async (checked: boolean | "indeterminate") => {
+    try {
+      const response = await updateTodo({
+        updatedTodo: {
+          ...todo,
+          completed: checked === "indeterminate" ? false : checked,
+        },
+        todoId: todo._id || "",
+      }).unwrap();
+      console.log(response);
+      dispatch(completeTodo({ id: todo._id, value: checked }));
+    } catch (error) {
+      console.log(`Error completing todo: ${error}`);
+    }
   };
 
   const handleSetShow = (value: boolean) => {
