@@ -18,7 +18,11 @@ const AllTasks = () => {
 
       <TasksSection
         title="High Priority"
-        todos={todos.filter((todo: Todo) => todo.priority === Priority.HIGH)}
+        todos={todos.filter(
+          (todo: Todo) =>
+            todo.priority === Priority.HIGH ||
+            todo.priority === Priority.OVERDUE
+        )}
       />
 
       <TasksSection
