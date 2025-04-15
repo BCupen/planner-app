@@ -7,8 +7,8 @@ export const Sidebar = () => {
 
   return (
     <aside
-      className={`h-dvh z-10 max-w-[250px] ${
-        expanded ? "w-full max-md:absolute" : "w-14"
+      className={`min-h-dvh z-10 max-w-[250px] ${
+        expanded ? "w-full max-sm:absolute" : "w-14"
       } sticky top-0 transition-all duration-150 ease-linear bg-sidebar`}
     >
       <nav className="w-full flex flex-col items-start p-4 gap-3">
