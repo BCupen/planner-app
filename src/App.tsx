@@ -14,7 +14,7 @@ import { setTodos } from "./data/todosSlice";
 import { useSetTodosPriority } from "./hooks/SetTodoPriority";
 
 function App() {
-  const { data: todos, isLoading } = useGetTodosQuery({});
+  const { data: todos, isSuccess, isLoading } = useGetTodosQuery({});
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -22,7 +22,7 @@ function App() {
     dispatch(setTodos(todos));
   }, [todos]);
 
-  useSetTodosPriority();
+  useSetTodosPriority(todos, isSuccess);
 
   return (
     <div className="w-full flex">
