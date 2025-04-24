@@ -5,7 +5,7 @@ const baseUrl = "http://localhost:8686/todos";
 
 export const todoApiSlice = createApi({
   reducerPath: "todoApiSlice",
-  baseQuery: fetchBaseQuery({ baseUrl }),
+  baseQuery: fetchBaseQuery({ baseUrl, credentials: "include" }),
   tagTypes: ["Todo"],
   endpoints: (builder) => ({
     getTodos: builder.query({

@@ -12,6 +12,8 @@ import { useEffect } from "react";
 import { useAppDispatch } from "./data/hooks";
 import { setTodos } from "./data/todosSlice";
 import { useSetTodosPriority } from "./hooks/SetTodoPriority";
+import Login from "./pages/Login";
+import PageWrapper from "./components/PageWrapper";
 
 function App() {
   const { data: todos, isSuccess, isLoading } = useGetTodosQuery({});
@@ -26,21 +28,18 @@ function App() {
 
   return (
     <div className="w-full flex">
-      <Sidebar />
-
-      <main className="w-full relative min-h-dvh p-4 md:p-12 bg-background">
-        <Routes>
-          <Route path="/" element={<Navigate to="/tasks" />} />
-          <Route path="/tasks">
-            <Route index element={<AllTasks />} />
-            <Route path="today" element={<TodaysTasks />} />
-            <Route path="upcoming" element={<WeeklyTasks />} />
-            <Route path=":date" element={<SpecificDateTasks />} />
-          </Route>
-        </Routes>
-        <Calendar />
-        <ThemeSwitcher />
-      </main>
+      <Routes>
+        {/* Auth Routes */}
+        <Route path="/login" element={<Login />} />
+        {/* Todo Routes */}
+        <Route path="/tasks" element={<PageWrapper />}>
+          <Route index element={<AllTasks />} />
+          <Route path="today" element={<TodaysTasks />} />
+          <Route path="upcoming" element={<WeeklyTasks />} />
+          <Route path=":date" element={<SpecificDateTasks />} />
+        </Route>
+      </Routes>
+      <ThemeSwitcher />
     </div>
   );
 }
