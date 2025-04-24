@@ -12,6 +12,7 @@ import { setTodos } from "./data/todosSlice";
 import { useSetTodosPriority } from "./hooks/SetTodoPriority";
 import Login from "./pages/Login";
 import PageWrapper from "./components/PageWrapper";
+import Signup from "./pages/Signup";
 
 function App() {
   const { data: todos, isSuccess, isLoading } = useGetTodosQuery({});
@@ -29,6 +30,8 @@ function App() {
       <Routes>
         {/* Auth Routes */}
         <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+
         {/* Todo Routes */}
         <Route path="/tasks" element={<PageWrapper />}>
           <Route index element={<AllTasks />} />
