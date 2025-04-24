@@ -20,3 +20,9 @@ export interface TodoPatchRequest {
   todoId: string;
   updatedTodo: Partial<Todo>;
 }
+
+export interface InputFieldState {
+  value: string;
+  hasError: boolean;
+  errorMessage: string;
+}
