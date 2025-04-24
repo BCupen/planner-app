@@ -1,10 +1,18 @@
 import { PageHeader } from "../components/PageHeader";
 import { useState } from "react";
+import { useLoginUserMutation } from "../data/api/userApiSlice";
+import { useNavigate } from "react-router";
+import { useAppDispatch } from "../data/hooks";
+import { setUser } from "../data/userSlice";
 
 const Login = () => {
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const [emailValue, setEmailValue] = useState<string>("");
   const [passwordValue, setPasswordValue] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
+
+  const [loginUser] = useLoginUserMutation();
 
   const validateEmail = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -16,20 +24,31 @@ const Login = () => {
     passwordValue.length === 0 ||
     !validateEmail(emailValue);
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (isButtonDisabled) return;
+    try {
+      const response = await loginUser({
+        email: emailValue,
+        password: passwordValue,
+      }).unwrap();
+      console.log("Login successful:", response);
+      dispatch(setUser({ name: response.name, email: response.email }));
+      navigate("/tasks", { replace: true });
+    } catch (error) {
+      console.error("Login failed:", error);
+    }
+  };
+
   return (
     <main className="w-full flex flex-col items-center gap-5 bg-background p-6 md:mt-4">
-      <div className="w-full md:w-1/3 border border-subtle bg-sidebar rounded-md px-4 py-6">
+      <div className="w-full md:w-1/2 lg:w-1/3 border border-subtle bg-sidebar rounded-md px-4 py-6">
         <PageHeader
           title="Looks like you aren't logged in"
           subText="Log in now to organize your tasks"
         />
 
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-          }}
-          className="flex flex-col gap-4 mt-4"
-        >
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4 mt-4">
           <div className="flex flex-col gap-1">
             <label htmlFor="emailInput" className="text-text-1">
               Email:
@@ -56,6 +75,7 @@ const Login = () => {
                 className="w-full md:w-3/4 bg-background focus:outline-none border border-subtle rounded-md p-1 text-text-2 text-sm"
               />
               <button
+                type="button"
                 className="underline text-subtle text-sm hover:text-primary transition-all duration-100"
                 onClick={() => {
                   setShowPassword(!showPassword);
@@ -68,6 +88,7 @@ const Login = () => {
 
           <div className="flex flex-col gap-2">
             <button
+              type="submit"
               disabled={isButtonDisabled}
               className="w-full shadow rounded-md py-2 flex justify-center items-center gap-2 bg-primary border border-primary hover:bg-transparent text-white hover:text-primary transition-all duration-100 disabled:bg-subtle disabled:text-background disabled:border-subtle disabled:cursor-not-allowed"
             >
