@@ -1,7 +1,16 @@
-import { Outlet } from "react-router";
+import { Navigate, Outlet } from "react-router";
 import { Sidebar } from "./Sidebar";
 import { Calendar } from "./Calendar";
+import { useAppSelector } from "../data/hooks";
+import { userState } from "../data/userSlice";
+
 const PageWrapper = () => {
+  const { name, email } = useAppSelector(userState);
+
+  if (!name || !email) {
+    return <Navigate to="/login" />;
+  }
+
   return (
     <>
       <Sidebar />
