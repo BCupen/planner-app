@@ -11,7 +11,11 @@ const Signup = () => {
     hasError: false,
     errorMessage: "",
   });
-  const [passwordValue, setPasswordValue] = useState<string>("");
+  const [password, setPassword] = useState<InputFieldState>({
+    value: "",
+    hasError: false,
+    errorMessage: "",
+  });
   const [confirmPasswordValue, setConfirmPasswordValue] = useState<string>("");
   const [name, setName] = useState<InputFieldState>({
     value: "",
@@ -120,6 +124,9 @@ const Signup = () => {
               onChange={(e) => setEmail({ ...email, value: e.target.value })}
               className="w-full md:w-3/4 bg-background focus:outline-none border border-subtle rounded-md p-1 text-text-2 text-sm"
             />
+            {email.hasError && (
+              <p className="text-red-600 text-sm">* {email.errorMessage}</p>
+            )}
           </div>
 
           <div className="flex flex-col gap-1">
@@ -129,8 +136,32 @@ const Signup = () => {
             <span className="flex gap-2 ">
               <input
                 type={showPassword ? "text" : "password"}
-                value={passwordValue}
-                onChange={(e) => setPasswordValue(e.target.value)}
+                value={password.value}
+                onBlur={() => {
+                  if (password.value.length === 0) {
+                    setPassword({
+                      ...password,
+                      hasError: true,
+                      errorMessage: "This is a required field",
+                    });
+                  } else if (!validatePassword(password.value)) {
+                    setPassword({
+                      ...password,
+                      hasError: true,
+                      errorMessage:
+                        "Password must be at least 8 characters long and contain at least one letter and one number",
+                    });
+                  } else {
+                    setPassword({
+                      ...password,
+                      hasError: false,
+                      errorMessage: "",
+                    });
+                  }
+                }}
+                onChange={(e) =>
+                  setPassword({ ...password, value: e.target.value })
+                }
                 id="passwordInput"
                 className="w-full md:w-3/4 bg-background focus:outline-none border border-subtle rounded-md p-1 text-text-2 text-sm"
               />
@@ -144,6 +175,9 @@ const Signup = () => {
                 Show
               </button>
             </span>
+            {password.hasError && (
+              <p className="text-red-600 text-sm">* {password.errorMessage}</p>
+            )}
           </div>
 
           <div className="flex flex-col gap-1">
