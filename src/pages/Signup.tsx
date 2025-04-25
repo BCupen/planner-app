@@ -6,7 +6,11 @@ import { InputFieldState } from "../data/types";
 const Signup = () => {
   const navigate = useNavigate();
 
-  const [emailValue, setEmailValue] = useState<string>("");
+  const [email, setEmail] = useState<InputFieldState>({
+    value: "",
+    hasError: false,
+    errorMessage: "",
+  });
   const [passwordValue, setPasswordValue] = useState<string>("");
   const [confirmPasswordValue, setConfirmPasswordValue] = useState<string>("");
   const [name, setName] = useState<InputFieldState>({
@@ -91,8 +95,29 @@ const Signup = () => {
             <input
               type="text"
               id="emailInput"
-              value={emailValue}
-              onChange={(e) => setEmailValue(e.target.value)}
+              value={email.value}
+              onBlur={() => {
+                if (email.value.length === 0) {
+                  setEmail({
+                    ...email,
+                    hasError: true,
+                    errorMessage: "This is a required field",
+                  });
+                } else if (!validateEmail(email.value)) {
+                  setEmail({
+                    ...email,
+                    hasError: true,
+                    errorMessage: "Invalid email format",
+                  });
+                } else {
+                  setEmail({
+                    ...email,
+                    hasError: false,
+                    errorMessage: "",
+                  });
+                }
+              }}
+              onChange={(e) => setEmail({ ...email, value: e.target.value })}
               className="w-full md:w-3/4 bg-background focus:outline-none border border-subtle rounded-md p-1 text-text-2 text-sm"
             />
           </div>
