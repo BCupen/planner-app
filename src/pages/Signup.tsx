@@ -1,10 +1,17 @@
 import { PageHeader } from "../components/PageHeader";
 import { useNavigate } from "react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { InputFieldState } from "../data/types";
+import { useRegisterUserMutation } from "../data/api/userApiSlice";
+import { useAppDispatch } from "../data/hooks";
+import { setUser } from "../data/userSlice";
+import { Toast } from "../components/toast";
 
 const Signup = () => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
+  const [registerUser, { isError }] = useRegisterUserMutation();
 
   const [email, setEmail] = useState<InputFieldState>({
     value: "",
@@ -28,8 +35,17 @@ const Signup = () => {
   });
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [showToast, setShowToast] = useState<boolean>(true);
 
-  const isButtonDisabled = false;
+  const isButtonDisabled =
+    name.hasError ||
+    email.hasError ||
+    password.hasError ||
+    confirmPassword.hasError ||
+    !name.value ||
+    !email.value ||
+    !password.value ||
+    !confirmPassword.value;
 
   const validateName = (name: string) => {
     const nameRegex = /^[a-zA-Z\s]+$/;
@@ -55,10 +71,57 @@ const Signup = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isButtonDisabled) return;
+    try {
+      const userData = {
+        name: name.value,
+        email: email.value,
+        password: password.value,
+      };
+      const response = await registerUser(userData).unwrap();
+      dispatch(
+        setUser({
+          name: response.name,
+          email: response.email,
+        })
+      );
+      if (response) {
+        navigate("/tasks", { replace: true });
+      }
+    } catch (error) {
+      console.error("Error during registration:", error);
+      if (typeof error === "object" && error !== null && "status" in error) {
+        const status = (error as { status: number }).status; // Narrowing the type
+        if (status === 400) {
+          setEmail({
+            ...email,
+            hasError: true,
+            errorMessage: "Email already exists",
+          });
+        }
+      } else {
+        setEmail({
+          ...email,
+          hasError: true,
+          errorMessage: "An unexpected error occurred",
+        });
+      }
+    }
   };
+
+  useEffect(() => {
+    if (isError) {
+      setShowToast(true);
+    }
+  }, [isError]);
 
   return (
     <main className="w-full flex flex-col items-center gap-5 bg-background p-6">
+      <Toast
+        title="Toast"
+        show={showToast}
+        onClose={() => setShowToast(false)}
+      />
       <div className="w-full md:w-1/2 lg:w-1/3 border border-subtle bg-sidebar rounded-md px-4 py-6">
         <PageHeader
           title="Let's get you signed up"

@@ -26,7 +26,7 @@ function App() {
   useSetTodosPriority(todos, isSuccess);
 
   return (
-    <div className="w-full flex">
+    <div className="w-full flex overflow-x-hidden">
       <Routes>
         {/* Auth Routes */}
         <Route path="/login" element={<Login />} />
