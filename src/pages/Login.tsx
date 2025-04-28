@@ -48,22 +48,11 @@ const Login = () => {
       dispatch(setUser({ name: response.name, email: response.email }));
       navigate("/tasks", { replace: true });
     } catch (error) {
-      console.error("Login failed:", error);
+      if ((error as { status: number }).status === 401) {
+        setShowToast(true);
+      }
     }
   };
-
-  useEffect(() => {
-    if (isError) {
-      setShowToast(true);
-      setEmail({ ...email, value: "", hasError: false, errorMessage: "" });
-      setPassword({
-        ...password,
-        value: "",
-        hasError: false,
-        errorMessage: "",
-      });
-    }
-  }, [isError]);
 
   return (
     <main className="w-full flex flex-col items-center gap-5 bg-background p-6 md:mt-4">
@@ -71,6 +60,7 @@ const Login = () => {
         title="An error occured"
         show={showToast}
         onClose={() => setShowToast(false)}
+        type="error"
       />
       <div className="w-full md:w-1/2 lg:w-1/3 border border-subtle bg-sidebar rounded-md px-4 py-6">
         <PageHeader
@@ -89,17 +79,17 @@ const Login = () => {
               value={email.value}
               onChange={(e) => setEmail({ ...email, value: e.target.value })}
               onBlur={() => {
-                if (!validateEmail(email.value)) {
-                  setEmail({
-                    ...email,
-                    hasError: true,
-                    errorMessage: "Please enter a valid email address",
-                  });
-                } else if (email.value.length === 0) {
+                if (email.value.length === 0) {
                   setEmail({
                     ...email,
                     hasError: true,
                     errorMessage: "Email cannot be empty",
+                  });
+                } else if (!validateEmail(email.value)) {
+                  setEmail({
+                    ...email,
+                    hasError: true,
+                    errorMessage: "Please enter a valid email address",
                   });
                 } else {
                   setEmail({ ...email, hasError: false, errorMessage: "" });

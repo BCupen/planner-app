@@ -19,7 +19,8 @@ export const Toast = ({
 }: ToastProps) => {
   const [isMounted, setIsMounted] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
-  const toastRef = useRef<HTMLDivElement>(null);
+  const autoDismissTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   const getToastStyles = (type: "info" | "error") => {
     switch (type) {
       case "info":
@@ -33,39 +34,33 @@ export const Toast = ({
   useEffect(() => {
     if (show) {
       setIsMounted(true);
-      setTimeout(() => {
-        setIsVisible(true);
-      }, 10); // allow DOM to mount before starting animation
-
-      // Start auto-dismiss timer
-      const timer = setTimeout(() => {
-        setIsVisible(false); // triggers exit animation
-      }, 3000);
-
-      return () => clearTimeout(timer); // cleanup timer on unmount
     } else {
-      setIsVisible(false);
+      setIsVisible(false); // triggers exit animation
     }
-  }, [open]);
+  }, [show]);
 
   useEffect(() => {
-    const handleAnimationEnd = (e: AnimationEvent) => {
-      if (e.animationName === "slideFadeOut") {
-        setIsMounted(false);
-        onClose(); // Parent callback
-      }
-    };
-
-    const node = toastRef.current;
-    if (node) {
-      node.addEventListener("animationend", handleAnimationEnd);
+    if (isMounted) {
+      // after mounting, trigger visible
+      setTimeout(() => {
+        setIsVisible(true);
+      }, 0); // wait for the next render cycle to trigger animation
     }
-    return () => {
-      if (node) {
-        node.removeEventListener("animationend", handleAnimationEnd);
+  }, [isMounted]);
+
+  const handleAnimationEnd = (e: React.AnimationEvent<HTMLDivElement>) => {
+    if (e.animationName.includes("In")) {
+      if (autoDismissTimer.current) {
+        clearTimeout(autoDismissTimer.current);
       }
-    };
-  }, [onClose]);
+      autoDismissTimer.current = setTimeout(() => {
+        setIsVisible(false);
+      }, 3000);
+    } else if (e.animationName.includes("Out")) {
+      setIsMounted(false);
+      onClose();
+    }
+  };
 
   if (!isMounted) {
     return null;
@@ -73,9 +68,9 @@ export const Toast = ({
 
   return (
     <div
-      ref={toastRef}
+      onAnimationEnd={handleAnimationEnd}
       className={[
-        "max-w-xs w-full z-100",
+        "max-w-xs w-full z-50",
         "rounded-md shadow-md px-3 py-2",
         "flex justify-between items-center",
         "absolute top-0 md:right-0 m-2 md:m-4",
@@ -88,11 +83,8 @@ export const Toast = ({
         <h2 className="font-semibold">{title}</h2>
         {description && <p className="text-red-600 text-sm">{description}</p>}
       </div>
-      <button className="flex items-center">
-        <Cross2Icon
-          className=" text-red-600 hover:text-red-700"
-          onClick={() => setIsVisible(false)}
-        />
+      <button className="flex items-center" onClick={() => setIsVisible(false)}>
+        <Cross2Icon className="text-red-600 hover:text-red-700" />
       </button>
     </div>
   );
