@@ -1,10 +1,11 @@
 import { PageHeader } from "../components/PageHeader";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLoginUserMutation } from "../data/api/userApiSlice";
 import { useNavigate } from "react-router";
 import { useAppDispatch } from "../data/hooks";
 import { setUser } from "../data/userSlice";
 import { InputFieldState } from "../data/types";
+import { Toast } from "../components/toast";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -14,10 +15,16 @@ const Login = () => {
     hasError: false,
     errorMessage: "",
   });
-  const [passwordValue, setPasswordValue] = useState<string>("");
+  const [password, setPassword] = useState<InputFieldState>({
+    value: "",
+    hasError: false,
+    errorMessage: "",
+  });
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
-  const [loginUser] = useLoginUserMutation();
+  const [showToast, setShowToast] = useState(false);
+
+  const [loginUser, { isError }] = useLoginUserMutation();
 
   const validateEmail = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -26,7 +33,7 @@ const Login = () => {
 
   const isButtonDisabled =
     email.value.length === 0 ||
-    passwordValue.length === 0 ||
+    password.value.length === 0 ||
     !validateEmail(email.value);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -35,7 +42,7 @@ const Login = () => {
     try {
       const response = await loginUser({
         email: email.value,
-        password: passwordValue,
+        password: password.value,
       }).unwrap();
       console.log("Login successful:", response);
       dispatch(setUser({ name: response.name, email: response.email }));
@@ -45,8 +52,26 @@ const Login = () => {
     }
   };
 
+  useEffect(() => {
+    if (isError) {
+      setShowToast(true);
+      setEmail({ ...email, value: "", hasError: false, errorMessage: "" });
+      setPassword({
+        ...password,
+        value: "",
+        hasError: false,
+        errorMessage: "",
+      });
+    }
+  }, [isError]);
+
   return (
     <main className="w-full flex flex-col items-center gap-5 bg-background p-6 md:mt-4">
+      <Toast
+        title="An error occured"
+        show={showToast}
+        onClose={() => setShowToast(false)}
+      />
       <div className="w-full md:w-1/2 lg:w-1/3 border border-subtle bg-sidebar rounded-md px-4 py-6">
         <PageHeader
           title="Looks like you aren't logged in"
@@ -94,8 +119,25 @@ const Login = () => {
             <span className="flex gap-2 ">
               <input
                 type={showPassword ? "text" : "password"}
-                value={passwordValue}
-                onChange={(e) => setPasswordValue(e.target.value)}
+                value={password.value}
+                onChange={(e) =>
+                  setPassword({ ...password, value: e.target.value })
+                }
+                onBlur={() => {
+                  if (password.value.length === 0) {
+                    setPassword({
+                      ...password,
+                      hasError: true,
+                      errorMessage: "Password cannot be empty",
+                    });
+                  } else {
+                    setPassword({
+                      ...password,
+                      hasError: false,
+                      errorMessage: "",
+                    });
+                  }
+                }}
                 id="passwordInput"
                 className="w-full md:w-3/4 bg-background focus:outline-none border border-subtle rounded-md p-1 text-text-2 text-sm"
               />
@@ -109,6 +151,9 @@ const Login = () => {
                 Show
               </button>
             </span>
+            {password.hasError && (
+              <p className="text-red-500 text-sm">{password.errorMessage}</p>
+            )}
           </div>
 
           <div className="flex flex-col gap-2">
