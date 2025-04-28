@@ -26,3 +26,14 @@ export interface InputFieldState {
   hasError: boolean;
   errorMessage: string;
 }
+
+export interface CreateUserRequest {
+  name: string;
+  email: string;
+  password: string;
+}
+
+export interface LoginUserRequest {
+  email: string;
+  password: string;
+}

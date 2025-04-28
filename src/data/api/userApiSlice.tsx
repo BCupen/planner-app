@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { CreateUserRequest, LoginUserRequest } from "../types";
 
 const baseUrl = "http://localhost:8686/auth";
 export const userApiSlice = createApi({
@@ -7,9 +8,17 @@ export const userApiSlice = createApi({
   tagTypes: ["User"],
   endpoints: (builder) => ({
     loginUser: builder.mutation({
-      query: (user) => ({
+      query: (user: LoginUserRequest) => ({
         method: "POST",
         url: "/login",
+        body: user,
+      }),
+      invalidatesTags: ["User"],
+    }),
+    registerUser: builder.mutation({
+      query: (user: CreateUserRequest) => ({
+        method: "POST",
+        url: "/register",
         body: user,
       }),
       invalidatesTags: ["User"],
@@ -17,4 +26,4 @@ export const userApiSlice = createApi({
   }),
 });
 
-export const { useLoginUserMutation } = userApiSlice;
+export const { useLoginUserMutation, useRegisterUserMutation } = userApiSlice;
