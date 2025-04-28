@@ -80,8 +80,8 @@ export const Toast = ({
       ].join(" ")}
     >
       <div>
-        <h2 className="font-semibold">{title}</h2>
-        {description && <p className="text-red-600 text-sm">{description}</p>}
+        <h2 className="font-semibold text-sm">{title}</h2>
+        {description && <p className="text-red-600 text-xs">{description}</p>}
       </div>
       <button className="flex items-center" onClick={() => setIsVisible(false)}>
         <Cross2Icon className="text-red-600 hover:text-red-700" />

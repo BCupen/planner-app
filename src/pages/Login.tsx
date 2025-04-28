@@ -1,5 +1,5 @@
 import { PageHeader } from "../components/PageHeader";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useLoginUserMutation } from "../data/api/userApiSlice";
 import { useNavigate } from "react-router";
 import { useAppDispatch } from "../data/hooks";
@@ -21,10 +21,11 @@ const Login = () => {
     errorMessage: "",
   });
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
   const [showToast, setShowToast] = useState(false);
 
-  const [loginUser, { isError }] = useLoginUserMutation();
+  const [loginUser] = useLoginUserMutation();
 
   const validateEmail = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -48,8 +49,11 @@ const Login = () => {
       dispatch(setUser({ name: response.name, email: response.email }));
       navigate("/tasks", { replace: true });
     } catch (error) {
+      setShowToast(true);
       if ((error as { status: number }).status === 401) {
-        setShowToast(true);
+        setErrorMessage("Invalid Credentials");
+      } else {
+        setErrorMessage("An error occurred");
       }
     }
   };
@@ -57,7 +61,7 @@ const Login = () => {
   return (
     <main className="w-full flex flex-col items-center gap-5 bg-background p-6 md:mt-4">
       <Toast
-        title="An error occured"
+        title={errorMessage}
         show={showToast}
         onClose={() => setShowToast(false)}
         type="error"
