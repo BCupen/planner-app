@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { Cross2Icon } from "@radix-ui/react-icons";
 import "./toast.css";
 
 export interface ToastProps {
@@ -9,7 +10,13 @@ export interface ToastProps {
   onClose: () => void;
 }
 
-export const Toast = ({ title, type = "info", show, onClose }: ToastProps) => {
+export const Toast = ({
+  title,
+  type = "info",
+  show,
+  onClose,
+  description,
+}: ToastProps) => {
   const [isMounted, setIsMounted] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const toastRef = useRef<HTMLDivElement>(null);
@@ -68,15 +75,25 @@ export const Toast = ({ title, type = "info", show, onClose }: ToastProps) => {
     <div
       ref={toastRef}
       className={[
-        "w-full md:w-[250px] z-100",
+        "max-w-xs w-full z-100",
         "rounded-md shadow-md px-3 py-2",
-        "absolute top-0 right-0 m-4",
+        "flex justify-between items-center",
+        "absolute top-0 md:right-0 m-2 md:m-4",
         "overflow-hidden pointer-events-auto",
         isVisible ? "toast-enter" : "toast-exit",
         getToastStyles(type),
       ].join(" ")}
     >
-      {title}
+      <div>
+        <h2 className="font-semibold">{title}</h2>
+        {description && <p className="text-red-600 text-sm">{description}</p>}
+      </div>
+      <button className="flex items-center">
+        <Cross2Icon
+          className=" text-red-600 hover:text-red-700"
+          onClick={() => setIsVisible(false)}
+        />
+      </button>
     </div>
   );
 };

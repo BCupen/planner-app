@@ -118,9 +118,11 @@ const Signup = () => {
   return (
     <main className="w-full flex flex-col items-center gap-5 bg-background p-6">
       <Toast
-        title="Toast"
+        title="An error occurred"
+        description="Please try again later"
         show={showToast}
         onClose={() => setShowToast(false)}
+        type="error"
       />
       <div className="w-full md:w-1/2 lg:w-1/3 border border-subtle bg-sidebar rounded-md px-4 py-6">
         <PageHeader
