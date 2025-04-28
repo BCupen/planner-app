@@ -5,26 +5,11 @@ import "react-day-picker/style.css";
 import TodaysTasks from "./pages/TodaysTasks";
 import WeeklyTasks from "./pages/WeeklyTasks";
 import SpecificDateTasks from "./pages/SpecificDateTasks";
-import { useGetTodosQuery } from "./data/api/todoApiSlice";
-import { useEffect } from "react";
-import { useAppDispatch } from "./data/hooks";
-import { setTodos } from "./data/todosSlice";
-import { useSetTodosPriority } from "./hooks/SetTodoPriority";
 import Login from "./pages/Login";
 import PageWrapper from "./components/PageWrapper";
 import Signup from "./pages/Signup";
 
 function App() {
-  const { data: todos, isSuccess, isLoading } = useGetTodosQuery({});
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    if (isLoading || !todos) return;
-    dispatch(setTodos(todos));
-  }, [todos]);
-
-  useSetTodosPriority(todos, isSuccess);
-
   return (
     <div className="w-full flex overflow-x-hidden">
       <Routes>

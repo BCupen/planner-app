@@ -4,7 +4,7 @@ import { CreateUserRequest, LoginUserRequest } from "../types";
 const baseUrl = "http://localhost:8686/auth";
 export const userApiSlice = createApi({
   reducerPath: "userApiSlice",
-  baseQuery: fetchBaseQuery({ baseUrl }),
+  baseQuery: fetchBaseQuery({ baseUrl, credentials: "include" }),
   tagTypes: ["User"],
   endpoints: (builder) => ({
     loginUser: builder.mutation({

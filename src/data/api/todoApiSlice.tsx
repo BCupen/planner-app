@@ -39,6 +39,7 @@ export const todoApiSlice = createApi({
 });
 
 export const {
+  useLazyGetTodosQuery,
   useGetTodosQuery,
   useCreateTodoMutation,
   useDeleteTodoMutation,

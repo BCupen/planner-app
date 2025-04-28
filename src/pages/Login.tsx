@@ -6,6 +6,8 @@ import { useAppDispatch } from "../data/hooks";
 import { setUser } from "../data/userSlice";
 import { InputFieldState } from "../data/types";
 import { Toast } from "../components/toast";
+import { useLazyGetTodosQuery } from "../data/api/todoApiSlice";
+import { setTodos } from "../data/todosSlice";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -26,6 +28,7 @@ const Login = () => {
   const [showToast, setShowToast] = useState(false);
 
   const [loginUser] = useLoginUserMutation();
+  const [getTodos] = useLazyGetTodosQuery();
 
   const validateEmail = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -45,8 +48,10 @@ const Login = () => {
         email: email.value,
         password: password.value,
       }).unwrap();
-      console.log("Login successful:", response);
       dispatch(setUser({ name: response.name, email: response.email }));
+
+      const todos = await getTodos({}).unwrap();
+      dispatch(setTodos(todos));
       navigate("/tasks", { replace: true });
     } catch (error) {
       setShowToast(true);
