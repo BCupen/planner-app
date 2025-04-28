@@ -16,7 +16,11 @@ const Signup = () => {
     hasError: false,
     errorMessage: "",
   });
-  const [confirmPasswordValue, setConfirmPasswordValue] = useState<string>("");
+  const [confirmPassword, setConfirmPassword] = useState<InputFieldState>({
+    value: "",
+    hasError: false,
+    errorMessage: "",
+  });
   const [name, setName] = useState<InputFieldState>({
     value: "",
     hasError: false,
@@ -40,6 +44,13 @@ const Signup = () => {
   const validatePassword = (password: string) => {
     const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/;
     return passwordRegex.test(password);
+  };
+
+  const validateConfirmPassword = (
+    password: string,
+    confirmPassword: string
+  ) => {
+    return password === confirmPassword;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -186,11 +197,47 @@ const Signup = () => {
             </label>
             <input
               type="password"
-              value={confirmPasswordValue}
-              onChange={(e) => setConfirmPasswordValue(e.target.value)}
+              value={confirmPassword.value}
+              onBlur={() => {
+                if (confirmPassword.value.length === 0) {
+                  setConfirmPassword({
+                    ...confirmPassword,
+                    hasError: true,
+                    errorMessage: "This is a required field",
+                  });
+                } else if (
+                  !validateConfirmPassword(
+                    password.value,
+                    confirmPassword.value
+                  )
+                ) {
+                  setConfirmPassword({
+                    ...confirmPassword,
+                    hasError: true,
+                    errorMessage: "Passwords do not match",
+                  });
+                } else {
+                  setConfirmPassword({
+                    ...confirmPassword,
+                    hasError: false,
+                    errorMessage: "",
+                  });
+                }
+              }}
+              onChange={(e) =>
+                setConfirmPassword({
+                  ...confirmPassword,
+                  value: e.target.value,
+                })
+              }
               id="confirmPasswordInput"
               className="w-full md:w-3/4 bg-background focus:outline-none border border-subtle rounded-md p-1 text-text-2 text-sm"
             />
+            {confirmPassword.hasError && (
+              <p className="text-red-600 text-sm">
+                * {confirmPassword.errorMessage}
+              </p>
+            )}
           </div>
 
           <div className="flex flex-col gap-2">
