@@ -4,11 +4,16 @@ import { useLoginUserMutation } from "../data/api/userApiSlice";
 import { useNavigate } from "react-router";
 import { useAppDispatch } from "../data/hooks";
 import { setUser } from "../data/userSlice";
+import { InputFieldState } from "../data/types";
 
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const [emailValue, setEmailValue] = useState<string>("");
+  const [email, setEmail] = useState<InputFieldState>({
+    value: "",
+    hasError: false,
+    errorMessage: "",
+  });
   const [passwordValue, setPasswordValue] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
@@ -20,16 +25,16 @@ const Login = () => {
   };
 
   const isButtonDisabled =
-    emailValue.length === 0 ||
+    email.value.length === 0 ||
     passwordValue.length === 0 ||
-    !validateEmail(emailValue);
+    !validateEmail(email.value);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (isButtonDisabled) return;
     try {
       const response = await loginUser({
-        email: emailValue,
+        email: email.value,
         password: passwordValue,
       }).unwrap();
       console.log("Login successful:", response);
@@ -56,10 +61,30 @@ const Login = () => {
             <input
               type="text"
               id="emailInput"
-              value={emailValue}
-              onChange={(e) => setEmailValue(e.target.value)}
+              value={email.value}
+              onChange={(e) => setEmail({ ...email, value: e.target.value })}
+              onBlur={() => {
+                if (!validateEmail(email.value)) {
+                  setEmail({
+                    ...email,
+                    hasError: true,
+                    errorMessage: "Please enter a valid email address",
+                  });
+                } else if (email.value.length === 0) {
+                  setEmail({
+                    ...email,
+                    hasError: true,
+                    errorMessage: "Email cannot be empty",
+                  });
+                } else {
+                  setEmail({ ...email, hasError: false, errorMessage: "" });
+                }
+              }}
               className="w-full md:w-3/4 bg-background focus:outline-none border border-subtle rounded-md p-1 text-text-2 text-sm"
             />
+            {email.hasError && (
+              <p className="text-red-500 text-sm">{email.errorMessage}</p>
+            )}
           </div>
 
           <div className="flex flex-col gap-1">
