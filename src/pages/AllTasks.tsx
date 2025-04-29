@@ -7,8 +7,6 @@ import { todoState } from "../data/todosSlice";
 const AllTasks = () => {
   const todos = useAppSelector(todoState);
 
-  console.log(todos[0]);
-
   return (
     <section className="w-full flex flex-col items-start gap-5">
       <PageHeader
@@ -29,6 +27,11 @@ const AllTasks = () => {
       <TasksSection
         title="Remaining Tasks"
         todos={todos.filter((todo: Todo) => !todo.completed)}
+      />
+
+      <TasksSection
+        title="Completed Tasks"
+        todos={todos.filter((todo: Todo) => todo.completed)}
       />
     </section>
   );

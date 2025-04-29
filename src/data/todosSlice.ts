@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "./store";
 import { Todo } from "./types";
+import { todoApiSlice } from "./api/todoApiSlice";
 
 const initialState: Todo[] = [];
 
@@ -35,6 +36,14 @@ export const todosSlice = createSlice({
       const newTodos = [...state.filter((todo) => todo._id !== action.payload)];
       return [...newTodos];
     },
+  },
+  extraReducers: (builder) => {
+    builder.addMatcher(
+      todoApiSlice.endpoints.getTodos.matchFulfilled,
+      (_state, action) => {
+        return [...action.payload];
+      }
+    );
   },
 });
 
