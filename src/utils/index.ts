@@ -10,3 +10,33 @@ export const getWeekRange = () => {
   }
   return week;
 };
+
+export const validators = {
+  validateTitle: (value: string) => {
+    const validRegex = /^[a-zA-Z0-9' ]+$/;
+    const trimmedValue = value.trim();
+    if (trimmedValue.length === 0) {
+      return {
+        hasError: true,
+        errorMessage: "Title is required",
+      };
+    }
+    if (!validRegex.test(trimmedValue)) {
+      return {
+        hasError: true,
+        errorMessage:
+          "Title can only contain letters, numbers, and spaces and apostrophes",
+      };
+    }
+    if (trimmedValue.length > 50) {
+      return {
+        hasError: true,
+        errorMessage: "Title must be less than 50 characters",
+      };
+    }
+    return {
+      hasError: false,
+      errorMessage: "",
+    };
+  },
+};

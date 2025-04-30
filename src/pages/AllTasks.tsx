@@ -1,4 +1,4 @@
-import { TasksSection } from "../components/TasksSection";
+import { TasksSection } from "../components/tasks/TasksSection";
 import { Priority, Todo } from "../data/types";
 import { PageHeader } from "../components/PageHeader";
 import { useAppSelector } from "../data/hooks";

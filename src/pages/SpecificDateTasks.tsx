@@ -1,6 +1,6 @@
 import { useParams } from "react-router";
 import { PageHeader } from "../components/PageHeader";
-import { TasksSection } from "../components/TasksSection";
+import { TasksSection } from "../components/tasks/TasksSection";
 import { useAppSelector } from "../data/hooks";
 import { todoState } from "../data/todosSlice";
 import { useMemo } from "react";
