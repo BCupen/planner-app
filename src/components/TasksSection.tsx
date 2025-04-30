@@ -12,8 +12,6 @@ import { FormEvent, useState } from "react";
 import { Priority, Todo } from "../data/types";
 import { PrioritySelector } from "./PrioritySelector";
 import { DatePicker } from "./DatePicker";
-import { useAppDispatch } from "../data/hooks";
-import { addTodo, completeTodo, editTodo } from "../data/todosSlice";
 import { getPriorityColor } from "../data/utils";
 import { DeleteTask } from "./DeleteTask";
 import {
@@ -68,7 +66,6 @@ export const TaskItem = ({
   createMode = false,
   onCreateClose,
 }: TaskItemProps) => {
-  const dispatch = useAppDispatch();
   const [active, setActive] = useState(false);
   const [editMode, setEditMode] = useState(createMode);
   const [updateTodo] = useUpdateTodoMutation();
@@ -83,7 +80,6 @@ export const TaskItem = ({
         todoId: todo._id || "",
       }).unwrap();
       console.log(response);
-      dispatch(completeTodo({ id: todo._id, value: checked }));
     } catch (error) {
       console.log(`Error completing todo: ${error}`);
     }
@@ -153,7 +149,6 @@ export const EditTaskForm = ({
   setShow,
   create = false,
 }: EditTaskFormProps) => {
-  const dispatch = useAppDispatch();
   const [tempTodo, setTempTodo] = useState(todo);
   const [createTodo] = useCreateTodoMutation();
   const [updateTodo] = useUpdateTodoMutation();
@@ -184,7 +179,6 @@ export const EditTaskForm = ({
         updatedTodo: tempTodo,
       });
       console.log(response);
-      dispatch(editTodo({ id: todo._id, todo: tempTodo }));
       setShow(false);
     } catch (error) {
       console.log(`Error:${error}`);
@@ -194,7 +188,6 @@ export const EditTaskForm = ({
   const handleCreate = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      dispatch(addTodo(tempTodo));
       const response = createTodo(tempTodo).unwrap();
       console.log(response);
       setShow(false);
