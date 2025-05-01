@@ -1,17 +1,40 @@
 import { ChevronLeftIcon, ChevronRightIcon } from "@radix-ui/react-icons";
-import { useState } from "react";
-import { NavLink } from "react-router";
+import { NavLink, useNavigate } from "react-router";
+import { useAppDispatch, useAppSelector } from "../../data/hooks";
+import { removeUser, userState } from "../../data/userSlice";
+import { useLogoutUserMutation } from "../../data/api/userApiSlice";
+import { useSidebar } from "./SidebarProvider";
 
 export const Sidebar = () => {
-  const [expanded, setExpanded] = useState(true);
+  const { name } = useAppSelector(userState);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
-  const handleSignOut = () => {};
+  const [logoutUser] = useLogoutUserMutation();
+
+  const { isOpen: expanded, toggle } = useSidebar();
+
+  const handleSignOut = () => {
+    try {
+      logoutUser({})
+        .unwrap()
+        .then(() => {
+          dispatch(removeUser());
+          navigate("/login", { replace: true });
+        });
+    } catch (error) {
+      console.error("Error signing out:", error);
+    }
+  };
 
   return (
     <aside
-      className={`min-h-dvh z-10 max-w-[250px] ${
-        expanded ? "w-full max-sm:absolute" : "w-14"
-      } sticky top-0 transition-all duration-150 ease-linear bg-sidebar`}
+      className={[
+        "h-dvh max-w-[256px] bg-sidebar",
+        "fixed top-0 left-0 z-10",
+        expanded ? "w-full" : "w-14",
+        "transition-all duration-300 ease-linear",
+      ].join(" ")}
     >
       <nav className="w-full flex flex-col items-start p-4 gap-3">
         <div className="max-h-9 w-full flex justify-between items-center">
@@ -24,7 +47,7 @@ export const Sidebar = () => {
           </h1>
           <button
             className="hover:bg-gray-300 rounded-full p-1 transition-all duration-150 ease-linear"
-            onClick={() => setExpanded(!expanded)}
+            onClick={() => toggle()}
           >
             {expanded ? (
               <ChevronLeftIcon className="text-primary w-5 h-5" />
@@ -53,14 +76,14 @@ export const Sidebar = () => {
             expanded ? "w-32" : "w-0"
           } overflow-hidden text-text-2 font-bold text-nowrap`}
         >
-          Hi, User
+          Hi, {name}
         </h3>
 
         <button
           onClick={() => handleSignOut()}
           className={`${
-            !expanded && "w-0"
-          } overflow-hidden underline text-primary text-sm font-semibold hover:text-subtle transition-all duration-150 ease-linear`}
+            expanded ? "w-16" : "w-0"
+          } overflow-hidden text-nowrap underline text-primary text-sm font-semibold hover:text-subtle transition-all duration-150 ease-linear`}
         >
           Sign out
         </button>

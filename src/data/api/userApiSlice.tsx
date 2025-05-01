@@ -23,7 +23,18 @@ export const userApiSlice = createApi({
       }),
       invalidatesTags: ["User"],
     }),
+    logoutUser: builder.mutation({
+      query: () => ({
+        method: "POST",
+        url: "/logout",
+      }),
+      invalidatesTags: ["User"],
+    }),
   }),
 });
 
-export const { useLoginUserMutation, useRegisterUserMutation } = userApiSlice;
+export const {
+  useLoginUserMutation,
+  useRegisterUserMutation,
+  useLogoutUserMutation,
+} = userApiSlice;
