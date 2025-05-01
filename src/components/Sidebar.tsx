@@ -5,6 +5,8 @@ import { NavLink } from "react-router";
 export const Sidebar = () => {
   const [expanded, setExpanded] = useState(true);
 
+  const handleSignOut = () => {};
+
   return (
     <aside
       className={`min-h-dvh z-10 max-w-[250px] ${
@@ -42,6 +44,27 @@ export const Sidebar = () => {
           <Link path="/tasks/upcoming" title="Upcoming" />
         </ul>
       </nav>
+
+      <div
+        className={`w-full absolute bottom-0 flex justify-between p-3 overflow-hidden`}
+      >
+        <h3
+          className={`${
+            expanded ? "w-32" : "w-0"
+          } overflow-hidden text-text-2 font-bold text-nowrap`}
+        >
+          Hi, User
+        </h3>
+
+        <button
+          onClick={() => handleSignOut()}
+          className={`${
+            !expanded && "w-0"
+          } overflow-hidden underline text-primary text-sm font-semibold hover:text-subtle transition-all duration-150 ease-linear`}
+        >
+          Sign out
+        </button>
+      </div>
     </aside>
   );
 };
