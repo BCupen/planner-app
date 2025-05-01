@@ -39,4 +39,25 @@ export const validators = {
       errorMessage: "",
     };
   },
+  validateDescription: (value: string) => {
+    const trimmedValue = value.trim();
+    const validRegex = /^[a-zA-Z0-9'@!#? ]+$/;
+    if (trimmedValue.length > 200) {
+      return {
+        hasError: true,
+        errorMessage: "Description must be less than 200 characters",
+      };
+    }
+    if (!validRegex.test(trimmedValue)) {
+      return {
+        hasError: true,
+        errorMessage:
+          "Invalid characters in description. Only letters, numbers, and @!#? are allowed",
+      };
+    }
+    return {
+      hasError: false,
+      errorMessage: "",
+    };
+  },
 };

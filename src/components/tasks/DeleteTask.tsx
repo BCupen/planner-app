@@ -1,8 +1,6 @@
 import { TrashIcon } from "@radix-ui/react-icons";
 import { AlertDialog } from "radix-ui";
-import { useAppDispatch } from "../data/hooks";
-import { removeTodo } from "../data/todosSlice";
-import { useDeleteTodoMutation } from "../data/api/todoApiSlice";
+import { useDeleteTodoMutation } from "../../data/api/todoApiSlice";
 
 interface DeleteTaskProps {
   active: boolean;
@@ -11,12 +9,10 @@ interface DeleteTaskProps {
 
 export const DeleteTask = ({ active, todoId }: DeleteTaskProps) => {
   const [deleteTodo] = useDeleteTodoMutation();
-  const dispatch = useAppDispatch();
   const handleDelete = async () => {
     try {
       const response = await deleteTodo(todoId).unwrap();
       console.log(response);
-      dispatch(removeTodo(todoId));
     } catch (error) {
       console.log(`Error deleting todo: ${error}`);
     }

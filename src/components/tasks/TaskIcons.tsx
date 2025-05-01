@@ -1,5 +1,5 @@
 import { Pencil1Icon } from "@radix-ui/react-icons";
-import { DeleteTask } from "../DeleteTask";
+import { DeleteTask } from "./DeleteTask";
 
 interface TaskIconProps {
   active: boolean;

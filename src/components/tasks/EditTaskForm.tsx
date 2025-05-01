@@ -6,6 +6,7 @@ import {
 import { Todo, InputFieldState, Priority } from "../../data/types";
 import { DatePicker } from "../DatePicker";
 import { PrioritySelector } from "../PrioritySelector";
+import { validators } from "../../utils";
 
 interface EditTaskFormProps {
   todo: Todo;
@@ -18,6 +19,7 @@ export const EditTaskForm = ({
   setShow,
   create = false,
 }: EditTaskFormProps) => {
+  const { validateTitle } = validators;
   const [tempTodo, setTempTodo] = useState(todo);
 
   const [todoTitle, setTodoTitle] = useState<InputFieldState>({
@@ -25,10 +27,17 @@ export const EditTaskForm = ({
     hasError: false,
     errorMessage: "",
   });
+  const [todoDescription, setTodoDescription] = useState<InputFieldState>({
+    value: todo.description,
+    hasError: false,
+    errorMessage: "",
+  });
+
   const [createTodo] = useCreateTodoMutation();
   const [updateTodo] = useUpdateTodoMutation();
 
-  const isButtonDisabled = true;
+  const isButtonDisabled =
+    todoTitle.hasError || todoDescription.hasError || !todoTitle.value;
 
   const handlePriorityChange = (value: Priority) => {
     setTempTodo((prev) => {
@@ -78,12 +87,18 @@ export const EditTaskForm = ({
       className="w-full flex flex-col items-start gap-2 text-text-1"
       onSubmit={create ? (e) => handleCreate(e) : (e) => handleSubmit(e)}
     >
-      <div>
+      <div className="w-full">
         <input
           type="text"
           className="w-full bg-transparent focus:outline-none font-semibold"
           placeholder="Do something really important"
           value={tempTodo.title}
+          onBlur={() => {
+            const validationResult = validateTitle(tempTodo.title);
+            setTodoTitle((prev) => {
+              return { ...prev, ...validationResult };
+            });
+          }}
           onChange={(e) => {
             setTodoTitle((prev) => {
               return { ...prev, value: e.target.value };
@@ -98,16 +113,31 @@ export const EditTaskForm = ({
         )}
       </div>
 
-      <textarea
-        className="w-full bg-transparent focus:outline-none h-12 resize-none font-medium text-text-2"
-        placeholder="A description for something really important"
-        value={tempTodo.description}
-        onChange={(e) =>
-          setTempTodo((prev) => {
-            return { ...prev, description: e.target.value };
-          })
-        }
-      />
+      <div className="w-full">
+        <textarea
+          className="w-full bg-transparent focus:outline-none h-12 resize-none font-medium text-text-2"
+          placeholder="A description for something really important"
+          value={tempTodo.description}
+          onBlur={() => {
+            const validationResult = validateTitle(tempTodo.description);
+            setTodoDescription((prev) => {
+              return { ...prev, ...validationResult };
+            });
+          }}
+          onChange={(e) => {
+            setTodoDescription((prev) => {
+              return { ...prev, value: e.target.value };
+            });
+            setTempTodo((prev) => {
+              return { ...prev, description: e.target.value };
+            });
+          }}
+        />
+        {todoDescription.hasError && (
+          <p className="text-red-500 text-xs">{todoDescription.errorMessage}</p>
+        )}
+      </div>
+
       <div className="flex gap-3">
         <DatePicker
           value={new Date(tempTodo.dueDate)}
