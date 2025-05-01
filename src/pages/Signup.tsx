@@ -35,7 +35,7 @@ const Signup = () => {
   });
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [showToast, setShowToast] = useState<boolean>(true);
+  const [showToast, setShowToast] = useState<boolean>(false);
 
   const isButtonDisabled =
     name.hasError ||
